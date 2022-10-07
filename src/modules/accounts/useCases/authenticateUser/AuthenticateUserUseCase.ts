@@ -53,7 +53,6 @@ class AuthenticateUserUseCase {
             subject: user.id,
             expiresIn: expires_in_refresh_token
         })
-
         await this.usersTokensRepository.create({
             expires_date: refresh_token_expires_date,
             refresh_token,

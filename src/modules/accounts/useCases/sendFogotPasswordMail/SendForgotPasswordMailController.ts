@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { SendForgotPasswordMailUseCase } from "./SendFogotPasswordMailUseCase";
+import { SendForgotPasswordMailUseCase } from "./SendForgotPasswordMailUseCase";
 
 
 class SendForgotPasswordMailController {

@@ -25,13 +25,13 @@ describe("Create Category Controller", () => {
             email: "admin@gmail.com",
             password: "admin"
         })
-        const { token } = responseToken.body
+        const { refresh_token } = responseToken.body
 
         const response = await request(app).post("/categories").send({
             name: "test",
             description: "test Category"
         }).set({
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${refresh_token}`
         })
 
         expect(response.status).toBe(201)
@@ -41,13 +41,13 @@ describe("Create Category Controller", () => {
             email: "admin@gmail.com",
             password: "admin"
         })
-        const { token } = responseToken.body
+        const { refresh_token } = responseToken.body
 
         const response = await request(app).post("/categories").send({
             name: "test",
             description: "test Category"
         }).set({
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${refresh_token}`
         })
 
         expect(response.status).toBe(400)

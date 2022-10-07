@@ -21,12 +21,12 @@ describe("List Category Controller", () => {
             email: "admin@gmail.com",
             password: "admin"
         })
-        const { token } = responseToken.body
+        const { refresh_token } = responseToken.body
         await request(app).post("/categories").send({
             name: "test",
             description: "test Category"
         }).set({
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${refresh_token}`
         })
     })
 
@@ -40,12 +40,12 @@ describe("List Category Controller", () => {
             email: "admin@gmail.com",
             password: "admin"
         })
-        const { token } = responseToken.body
+        const { refresh_token } = responseToken.body
         await request(app).post("/categories").send({
             name: "test",
             description: "test Category"
         }).set({
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${refresh_token}`
         })
         const response = await request(app).get("/categories")
         console.log(response.body)
