@@ -1,5 +1,5 @@
 import { container } from "tsyringe";
-import '../container/providers'
+import './providers'
 
 import { ICategoriesRepository } from "../../modules/cars/repositories/interfaces/ICategoriesRepository"
 import { CategoriesRepository } from "../../modules/cars/infra/typeorm/repositories/CategoriesRepository";
