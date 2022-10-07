@@ -4,6 +4,7 @@ import { CreateUserUseCase } from "../../modules/accounts/useCases/createUser/Cr
 import { SendForgotPasswordMailUseCase } from "../../modules/accounts/useCases/sendFogotPasswordMail/SendForgotPasswordMailUseCase";
 import { DayjsDateProvider } from "../../shared/container/providers/DateProvider/implementations/DayjsDateProvider";
 import { MailProviderInMemory } from "../../shared/container/providers/MailProvider/in-memory/MailProviderInMemory";
+import { AppError } from "../../shared/errors/AppError";
 
 let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
 let createUserUseCase: CreateUserUseCase;
@@ -20,7 +21,27 @@ describe("Send fogot mail", () => {
     createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
     sendForgotPasswordMailUseCase = new SendForgotPasswordMailUseCase(usersRepositoryInMemory,usersTokensRepositoryInMemory,dateProvider,mailProviderInMemory);
   });
-  it("should be able to send a forgot password mail to user", () => {
+  it("should be able to send a forgot password mail to user", async () => {
+    const sendMail = spyOn(mailProviderInMemory, "sendMail")
+    await usersRepositoryInMemory.create({
+      driver_license: "070673",
+      email: "job@ok.bf",
+      name: "Noah Hall",
+      password: "123"
+    })
+    await sendForgotPasswordMailUseCase.execute("job@ok.bf")
+
+    expect(sendMail).toHaveBeenCalled();
 
   });
+
+  it("should not be able to send an email if user does not exists", async ()=>{
+    await expect(
+      sendForgotPasswordMailUseCase.execute("email@teste.com")
+    ).rejects.toEqual(new AppError("User does not exist"))
+  })
+
+  it("should be able to creat an users token", ()=>{
+    spyOn(usersTokensRepositoryInMemory, "create")
+  })
 });
