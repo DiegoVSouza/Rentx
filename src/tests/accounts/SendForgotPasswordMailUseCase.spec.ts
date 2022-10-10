@@ -19,10 +19,10 @@ describe("Send fogot mail", () => {
     mailProviderInMemory = new MailProviderInMemory();
     dateProvider = new DayjsDateProvider();
     createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
-    sendForgotPasswordMailUseCase = new SendForgotPasswordMailUseCase(usersRepositoryInMemory,usersTokensRepositoryInMemory,dateProvider,mailProviderInMemory);
+    sendForgotPasswordMailUseCase = new SendForgotPasswordMailUseCase(usersRepositoryInMemory, usersTokensRepositoryInMemory, dateProvider, mailProviderInMemory);
   });
   it("should be able to send a forgot password mail to user", async () => {
-    const sendMail = spyOn(mailProviderInMemory, "sendMail")
+    const sendMail = jest.spyOn(mailProviderInMemory, "sendMail")
     await usersRepositoryInMemory.create({
       driver_license: "070673",
       email: "job@ok.bf",
@@ -35,13 +35,21 @@ describe("Send fogot mail", () => {
 
   });
 
-  it("should not be able to send an email if user does not exists", async ()=>{
+  it("should not be able to send an email if user does not exists", async () => {
     await expect(
       sendForgotPasswordMailUseCase.execute("email@teste.com")
     ).rejects.toEqual(new AppError("User does not exist"))
   })
 
-  it("should be able to creat an users token", ()=>{
-    spyOn(usersTokensRepositoryInMemory, "create")
+  it("should be able to creat an users token", async () => {
+    const generateTokenEmail = jest.spyOn(usersTokensRepositoryInMemory, "create")
+    await usersRepositoryInMemory.create({
+      driver_license: "070673",
+      email: "email@teste.com",
+      name: "Noah Hall",
+      password: "123"
+    })
+    await sendForgotPasswordMailUseCase.execute('email@teste.com')
+    expect(generateTokenEmail).toBeCalled()
   })
 });
